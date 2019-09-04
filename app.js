@@ -16,7 +16,30 @@ app.post("/",function(req,res) {
     var lastName = req.body.lastName;
     var email = req.body.email;
 
-    console.log(firstName,lastName,email);
+    var data = {
+        members: [
+            {
+                email_address:email,
+                status:"subscribed",
+                merge_fields: {
+                    FNAME:firstName,
+                    LNAME:lastName,
+                }
+            }
+        ]
+    }
+
+    var jsonData= JSON.stringify(data);
+
+
+    
+    request(options,function(error,response,body) {
+        if(response.statusCode != 200) {
+            res.sendFile(__dirname + "/failure.html");
+        }else {
+            res.sendFile(__dirname + "/success.html");
+        }
+    })
 })
 
 
