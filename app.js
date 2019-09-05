@@ -2,6 +2,8 @@ const express = require("express");
 const request = require("request");
 const bodyParser = require("body-parser");
 
+ require('custom-env').env();
+
 const app = express();
 
 app.use(express.static("public"));
@@ -31,8 +33,16 @@ app.post("/",function(req,res) {
 
     var jsonData= JSON.stringify(data);
 
+     var options = {
+         url: process.env.URL,
+         method:"POST",
+         headers: {
+             "Authorization": process.env.AUTH
+         },
 
-    
+          body: jsonData,
+     };
+
     request(options,function(error,response,body) {
         if(response.statusCode != 200) {
             res.sendFile(__dirname + "/failure.html");
@@ -40,6 +50,8 @@ app.post("/",function(req,res) {
             res.sendFile(__dirname + "/success.html");
         }
     })
+
+    
 })
 
 
